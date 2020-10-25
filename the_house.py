@@ -1,7 +1,8 @@
-print("You are in front of house. You see a door.")
+print("You are in front of house. You see a door and a box.")
 location = "outside"
 face = "north"
 backpack = set()
+box = {'key','book','map'}
 while True:
   select = input()
   select = select.split(" ")
@@ -16,7 +17,7 @@ while True:
       if location=="outside":
         location = "room1"
         face = "south"
-        print("You're inside the house")
+        print("You're inside the house. There are doors at the east and west and a box accross the room.")
       elif location=="room1":
         if face=="south":
           location = "outside"
@@ -32,7 +33,10 @@ while True:
           print("You're inside the house")
     elif obj=="box":
       if location=="outside":
-        print("There's a letter in the box")
+        print("Box opened:")
+        for x in box:
+          print("-" + x)
+        print("(You can get the object by typing: get [objectname])")
       if location=="room1":
         print("There's a key in the box")
     else:
@@ -43,12 +47,15 @@ while True:
     print("You're now facing "+obj)
 
   elif command=="get":
-    backpack.add(obj)
-    print("Keep " + obj + " in backpack")
-
+    if obj in box:
+      backpack.add(obj)
+      box.remove(obj)
+      print("Keep " + obj + " in backpack")
+    else:
+      print("There's no " + obj + " in the box")
   elif command=="backpack":
-    for thing in backpack:
-      print(thing)
+    for x in backpack:
+      print(x)
     
   elif command=="look":
     if location=="outside":
