@@ -3,6 +3,15 @@ location = "outside"
 face = "north"
 backpack = set()
 box = {'key','book','map'}
+boxes = {
+  "outside":{'key','book','map'},
+  "inside":{'letter'}
+}
+box_opened = False
+boxes_opened = {
+  "outside":False,
+  "inside":False
+}
 while True:
   select = input()
   select = select.split(" ")
@@ -32,13 +41,10 @@ while True:
           face = "east"
           print("You're inside the house")
     elif obj=="box":
-      if location=="outside":
-        print("Box opened:")
-        for x in box:
-          print("-" + x)
-        print("(You can get the object by typing: get [objectname])")
-      if location=="room1":
-        print("There's a key in the box")
+      boxes_opened[location]=True
+      print("Box opened. You can get one of these object:")
+      for x in boxes[location]:
+        print("-" + x)
     else:
       print("What do you want to open?")
 
@@ -47,12 +53,16 @@ while True:
     print("You're now facing "+obj)
 
   elif command=="get":
-    if obj in box:
-      backpack.add(obj)
-      box.remove(obj)
-      print("Keep " + obj + " in backpack")
+    if boxes_opened[location]:
+      if obj in boxes[location]:
+        backpack.add(obj)
+        box.remove(obj)
+        box_opened=False
+        print("Keep " + obj + " in backpack")
+      else:
+        print("There's no " + obj + " in the box")
     else:
-      print("There's no " + obj + " in the box")
+      print("You can't get the "+obj+". The box is not opened.")
   elif command=="backpack":
     for x in backpack:
       print(x)
